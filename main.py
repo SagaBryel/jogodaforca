@@ -24,6 +24,20 @@ def draw():
     # teste com alteração da cor de fundo
     tela.fill(verdepis)
 
+def tela_de_derrota():
+    tela.fill((255, 0, 0))  # Vermelho para indicar a derrota
+    fonteg = pygame.font.Font(None, 72)
+    fontep = pygame.font.Font(None, 36)
+    mensagem = fonteg.render("Você Perdeu o Jogo!", True, (0, 0, 0))
+    mensagem2 = fontep.render("Essa Janela se auto destruirá em 5 segundos!", True, (0, 0, 0))
+    mensagem_rect = mensagem.get_rect()
+    mensagem2_rect = mensagem2.get_rect()
+    mensagem_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2)
+    mensagem2_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 50)
+    tela.blit(mensagem, mensagem_rect)
+    tela.blit(mensagem2, mensagem2_rect)
+    pygame.display.update()
+
 # Posições iniciais para fazer os traços
 traco_x_inicial = 100
 traco_y = 400
@@ -62,6 +76,9 @@ if __name__ == '__main__':
 
     while gameLoop:
         if(vidas <= 0):
+            tela_de_derrota()
+            # Para esperar 6 segundos antes de fechar o programa
+            pygame.time.delay(6000)
             gameLoop = False
         for event in pygame.event.get():
             # Clicaram no X na janela para fechar
