@@ -23,14 +23,18 @@ def draw():
     # teste com alteração da cor de fundo
     tela.fill(verdepis)
 
+# Posições iniciais para fazer os traços
+traco_x_inicial = 100
+traco_y = 400
+espacamento = 50
 
-def traçoDasLetras(palavra, linha_x, linha_y, espacamento):
-    linhas = []
+def tracoDasLetras(palavra, traco_x, traco_y, espacamento):
+    tracos = []
     for i in range(len(palavra)):
-        linha = (linha_x, linha_y)
-        linhas.append(linha)
-        linha_x += espacamento
-    return linhas
+        traco = (traco_x, traco_y)
+        tracos.append(traco)
+        traco_x += espacamento
+    return tracos
 
 gameLoop = True
 if __name__ == '__main__':
@@ -41,4 +45,6 @@ if __name__ == '__main__':
                 gameLoop = False
 
         draw()
+        for traco in tracoDasLetras(palavra, traco_x_inicial, traco_y, espacamento):
+            pygame.draw.line(tela, (0, 0, 0), (traco[0], traco_y), (traco[0] + espacamento - 10, traco_y), 2)
         pygame.display.update()
