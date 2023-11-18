@@ -58,7 +58,10 @@ verdepis = [60, 85, 80]
 # Banco de palavras provisório
 palavras = ['CIDADE',
             'SOCIAL',
-            'ESTADO']
+            'ESTADO',
+            'PYTHON',
+            'TECLADO',
+            'CODIGO']
 
 def draw():
     # teste com alteração da cor de fundo
@@ -75,6 +78,24 @@ def tela_de_derrota():
     mensagem_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2)
     mensagem2_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 50)
     tela.blit(mensagem, mensagem_rect)
+    tela.blit(mensagem2, mensagem2_rect)
+    pygame.display.update()
+
+def tela_acabou_palavras():
+    tela.fill((0, 100, 100))
+    fonteg = pygame.font.Font(None, 60)
+    fontep = pygame.font.Font(None, 24)
+    mensagem = fonteg.render("Não há mais palavras", True, (0, 0, 0))
+    mensagem1 = fonteg.render("a serem adivinhadas", True, (0, 0, 0))
+    mensagem2 = fontep.render("Essa Janela se auto destruirá em 5 segundos!", True, (0, 0, 0))
+    mensagem_rect = mensagem.get_rect()
+    mensagem1_rect = mensagem1.get_rect()
+    mensagem2_rect = mensagem2.get_rect()
+    mensagem_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 - 50)
+    mensagem1_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2)
+    mensagem2_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 50)
+    tela.blit(mensagem, mensagem_rect)
+    tela.blit(mensagem1, mensagem1_rect)
     tela.blit(mensagem2, mensagem2_rect)
     pygame.display.update()
 
@@ -98,7 +119,9 @@ def tela_de_vitoria(palavra_vitoriosa):
 
 def reinicia_game(repetidas, palavra):
     repetidas.append(palavra)
-    palavra = random.choice(palavras)
+    palavras.remove(palavra)
+    if len(palavras) > 0:
+        palavra = random.choice(palavras)
     return palavra
 
 # Posições iniciais para fazer os traços
@@ -150,6 +173,13 @@ if __name__ == '__main__':
             pygame.time.delay(6000)
             gameLoop = False
 
+        #encerra o programa caso não haja mais palavras a serem adivinhadas
+        if len(palavras) == 0:
+            tela_acabou_palavras()
+            # Para esperar 5 segundos antes de fechar o programa
+            pygame.time.delay(5000)
+            gameLoop = False
+
         # Verifica se não há mais letras em branco na palavra
         # ou seja, se o jogador ganhou
         if '_' not in letras_corretas:
@@ -163,10 +193,16 @@ if __name__ == '__main__':
                         winnerloop = False
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_r:
-                            #para reiniciar o jogo no futuro
-                            reinicia_game(repetidas, palavra)
+                            palavra = reinicia_game(repetidas, palavra)
+                            letras_corretas = ['_' for _ in palavra]
+                            vidas = 3
+                            indicadores = Indicadores((10, TELA_ALTURA/2 + 100), 15, (10, 10, 10))
+                            ganhou = False
+                            winnerloop = False
+                            gameLoop = True  # Adicione esta linha para reiniciar o jogo
                         if event.key == pygame.K_q:
                             gameLoop = False
+                            restart = False
                             winnerloop = False
 
         for event in pygame.event.get():
@@ -198,16 +234,3 @@ if __name__ == '__main__':
         desenhar_letras(letras_corretas, tracos)
         desenha_boneco(vidas)
         pygame.display.update()
-
-
-
-
-
-
-
-
-
-
-
-
-
