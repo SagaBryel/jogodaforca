@@ -5,8 +5,8 @@ import random
 letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
           'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
           'U', 'V', 'X', 'W', 'Y', 'Z']
-cor_acerto = [144, 238, 144]
-cor_erro = [220, 20, 60]
+cor_acerto = [144, 238, 144] #verde
+cor_erro = [220, 20, 60] #vermelho
 class Indicadores:
     def __init__(self, posicao_inicial, espacamento, cor_inicial):
         global letras
@@ -51,6 +51,32 @@ TELA_LARGURA = 480
 TELA_ALTURA = 854
 tela = pygame.display.set_mode((TELA_LARGURA, TELA_ALTURA))
 pygame.display.set_caption("Jogo da Forca")
+
+#Carregando o spritesheet
+spritesheet = pygame.image.load("imagens/cid.png")
+#Separando o spritesheet
+frames = []
+for linha in range(0, spritesheet.get_height(), 400):#percorrendo a largura da spritesheet de 400 em 400 pixels
+    for coluna in range(0, spritesheet.get_width(), 400):
+        frame = spritesheet.subsurface((coluna, linha, 400, 400))#extraindo os frames da spritesheet
+        frames.append(frame)
+#Frames 0 a 5: inicializando
+#Frames 6 e 7, 8 e 9, 10 e 11, 12 e 13, 14 e 15, 16 e 17, por fim 18 e 19 representam as vidas sendo perdidas
+#Frame 20 é a derrota.
+
+#Classe SpriteAnimation que herda de pygame.sprite.Sprite
+class SpriteAnimation(pygame.sprite.Sprite):
+    def __init__(self, frames):
+        super().__init__()
+        self.frames = frames
+        self.frame_atual = 0
+        self.image = self.frames[self.frame_atual]
+        self.rect = self.image.get_rect()
+        self.rect.center = (TELA_LARGURA // 2, 200)
+
+    def update(self):
+        self.frame_atual = (self.frame_atual + 1) % len(self.frames)
+        self.image = self.frames[self.frame_atual]
 
 # numeros para verde piscina em RGB
 verdepis = [60, 85, 80]
@@ -146,11 +172,25 @@ def desenhar_letras(letras_corretas, tracos):
             letra_rect.center = (tracos[i][0] + espacamento // 2, tracos[i][1] - 30)
             tela.blit(letra_surface, letra_rect)
 
-def desenha_boneco(qtdvidas):#inicialmente será representado por um contador de vidas
-    fonte = pygame.font.Font(None, 36)
-    texto = fonte.render(f'Vidas: {qtdvidas}', True, (0, 0, 0))
-    tela.blit(texto, (10, 10))
+def desenha_boneco(cid):#inicialmente será representado por um contador de vidas
+    tela.blit(cid.image, cid.rect)
 
+def atualiza_boneco(qtdvidas, dificuldade, cid):
+    #7 vidas para o modo facil
+    #4 vidas para o modo dificil, 5, 8 e 9, 12 e 13, 16 a 19 e 20 para fim
+    if(dificuldade == 1):
+        if qtdvidas == 0:
+            cid.frames = frames[20] # Derrota
+        elif qtdvidas == 1:
+            cid.frames = frames[16:20]#inclui o primeiro mas não inclui o segundo limite
+        elif qtdvidas == 2:
+            cid.frames = frames[12:14]
+        elif qtdvidas == 3:
+            cid.frames = [frames[8:10]]
+        else:
+            cid.frames = [frames[5]]
+
+clock = pygame.time.Clock()
 
 gameLoop = True
 if __name__ == '__main__':
@@ -160,11 +200,14 @@ if __name__ == '__main__':
     # Cria uma lista inicializada com sublinhados e com numero de elementos igual à quantidade de letras na palavra
     letras_corretas = ['_' for _ in palavra]
 
-    vidas = 3
+    dificuldade = 1 #1 para dificil e 0 para facil
+    vidas = 4
 
     # Banco de palavras ja usadas numa secao
     repetidas = []
     indicadores = Indicadores((10, TELA_ALTURA/2 + 100), 15, (10, 10, 10))
+
+    cid = SpriteAnimation(frames)
 
     while gameLoop:
         if(vidas <= 0):
@@ -223,6 +266,7 @@ if __name__ == '__main__':
                                 letras_corretas[i] = chute
                     else:
                         vidas-=1
+                        atualiza_boneco(vidas, dificuldade, cid)
         tracos = tracoDasLetras(palavra, traco_x_inicial, traco_y, espacamento)
         draw()
 
@@ -232,5 +276,10 @@ if __name__ == '__main__':
 
         indicadores.desenhar(tela)
         desenhar_letras(letras_corretas, tracos)
-        desenha_boneco(vidas)
+        #print(frames.__len__())
+
+        cid.update()
+        desenha_boneco(cid)
+        pygame.display.flip()
+        clock.tick(5)  # Limite de frames por segundo
         pygame.display.update()
