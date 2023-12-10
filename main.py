@@ -5,8 +5,19 @@ import random
 letras = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
           'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
           'U', 'V', 'X', 'W', 'Y', 'Z']
-cor_acerto = [144, 238, 144] #verde
-cor_erro = [220, 20, 60] #vermelho
+
+# Cores
+green = "#bcd246"
+yellow = "#f4ad42"
+red = "#c73d52"
+grey = "#787c7e"
+outline = "#d3d6da"
+blue = "#4b8fbd"
+blue2 = "#77c6ff"
+blue3 = "#144970"
+cor_acerto = green
+cor_erro = red
+
 class Indicadores:
     def __init__(self, posicao_inicial, espacamento, cor_inicial):
         global letras
@@ -61,6 +72,7 @@ for linha in range(0, spritesheet.get_height(), 400):#percorrendo a largura da s
         frame = spritesheet.subsurface((coluna, linha, 400, 400))#extraindo os frames da spritesheet
         allframes.append(frame)
 #Frames 0 a 5: inicializando
+inicializando = True# para inicializar uma vez só
 #Frames 6 e 7, 8 e 9, 10 e 11, 12 e 13, 14 e 15, 16 e 17, por fim 18 e 19 representam as vidas sendo perdidas
 #Frame 20 é a derrota.
 #Classe SpriteAnimation que herda de pygame.sprite.Sprite
@@ -74,30 +86,40 @@ class SpriteAnimation(pygame.sprite.Sprite):
         self.rect.center = (TELA_LARGURA // 2, 200)
 
     def update(self):
-        self.frame_atual = (self.frame_atual + 1) % len(self.frames)
-        self.image = self.frames[self.frame_atual]
+        global inicializando
+        if inicializando:
+            self.frame_atual = (self.frame_atual + 1) % len(self.frames)
+            self.image = self.frames[self.frame_atual]
+            if self.frame_atual == len(self.frames) - 1:
+                inicializando = False
+        else:
+            self.frame_atual = (self.frame_atual + 1) % len(self.frames)
+            self.image = self.frames[self.frame_atual]
 
-# numeros para verde piscina em RGB
-verdepis = [60, 85, 80]
+# Banco de palavras
+def carregar_palavras(nome_arquivo):
+    try:
+        with open(nome_arquivo, 'r') as arquivo:
+            linhas = arquivo.readlines()
+            palavras_com_definicao = [linha.strip().split(':') for linha in linhas]
+        return palavras_com_definicao
+    except FileNotFoundError:
+        print(f"Erro: O arquivo '{nome_arquivo}' não foi encontrado.")
+        return []
 
-# Banco de palavras provisório
-palavras = ['CIDADE',
-            'SOCIAL',
-            'ESTADO',
-            'PYTHON',
-            'TECLADO',
-            'CODIGO']
+palavras_com_definicao = carregar_palavras("dictionary/dictionary.txt")
+
 
 def draw():
     # teste com alteração da cor de fundo
-    tela.fill(verdepis)
+    tela.fill(blue)
 
 def tela_de_derrota():
-    tela.fill((255, 0, 0))  # Vermelho para indicar a derrota
+    tela.fill(red)  # Vermelho para indicar a derrota
     fonteg = pygame.font.Font(None, 60)
     fontep = pygame.font.Font(None, 24)
     mensagem = fonteg.render("Você Perdeu o Jogo!", True, (0, 0, 0))
-    mensagem2 = fontep.render("Essa Janela se auto destruirá em 5 segundos!", True, (0, 0, 0))
+    mensagem2 = fontep.render("Essa Janela se auto destruirá em 3 segundos!", True, (0, 0, 0))
     mensagem_rect = mensagem.get_rect()
     mensagem2_rect = mensagem2.get_rect()
     mensagem_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2)
@@ -107,7 +129,7 @@ def tela_de_derrota():
     pygame.display.update()
 
 def tela_acabou_palavras():
-    tela.fill((0, 100, 100))
+    tela.fill(yellow)
     fonteg = pygame.font.Font(None, 60)
     fontep = pygame.font.Font(None, 24)
     mensagem = fonteg.render("Não há mais palavras", True, (0, 0, 0))
@@ -125,7 +147,7 @@ def tela_acabou_palavras():
     pygame.display.update()
 
 def tela_de_vitoria(palavra_vitoriosa):
-    tela.fill((0, 255, 0))  # Preencha a tela com verde para indicar a vitória
+    tela.fill(green)  # Preencha a tela com verde para indicar a vitória
     fonte_grande = pygame.font.Font(None, 60)
     fonte_pequena = pygame.font.Font(None, 24)
     mensagem_grande = fonte_grande.render("Você Venceu!", True, (0, 0, 0))
@@ -142,12 +164,12 @@ def tela_de_vitoria(palavra_vitoriosa):
     tela.blit(mensagem_recomecar, mensagem_recomecar_rect)
     pygame.display.update()
 
-def reinicia_game(repetidas, palavra):
-    repetidas.append(palavra)
-    palavras.remove(palavra)
-    if len(palavras) > 0:
-        palavra = random.choice(palavras)
-    return palavra
+def reinicia_game(repetidas, palavra_e_definicao):
+    repetidas.append(palavra_e_definicao)
+    palavras_com_definicao.remove(palavra_e_definicao)
+    if len(palavras_com_definicao) > 0:
+        palavra_e_definicao = random.choice(palavras_com_definicao)
+    return palavra_e_definicao
 
 # Posições iniciais para fazer os traços
 traco_x_inicial = 100
@@ -202,7 +224,8 @@ clock = pygame.time.Clock()
 gameLoop = True
 if __name__ == '__main__':
     #escolhe uma palavra do banco de palavras
-    palavra = random.choice(palavras)
+    palavra_e_definicao = random.choice(palavras_com_definicao)
+    palavra, definicao = palavra_e_definicao[0].upper(), palavra_e_definicao[1]
     print(palavra)#com a finalidade de conferencia
     # Cria uma lista inicializada com sublinhados e com numero de elementos igual à quantidade de letras na palavra
     letras_corretas = ['_' for _ in palavra]
@@ -214,17 +237,19 @@ if __name__ == '__main__':
     repetidas = []
     indicadores = Indicadores((10, TELA_ALTURA/2 + 100), 15, (10, 10, 10))
 
-    cid = SpriteAnimation(allframes)
+    cid = SpriteAnimation(allframes[1:6])
 
     while gameLoop:
         if(vidas <= 0):
+            #Tempo para apresentar o sprite de derrota do boneco
+            pygame.time.delay(2000)
             tela_de_derrota()
-            # Para esperar 6 segundos antes de fechar o programa
-            pygame.time.delay(6000)
+            # Para esperar 3 segundos antes de fechar o programa
+            pygame.time.delay(3000)
             gameLoop = False
 
         #encerra o programa caso não haja mais palavras a serem adivinhadas
-        if len(palavras) == 0:
+        if len(palavras_com_definicao) == 0:
             tela_acabou_palavras()
             # Para esperar 5 segundos antes de fechar o programa
             pygame.time.delay(5000)
@@ -243,13 +268,14 @@ if __name__ == '__main__':
                         winnerloop = False
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_r:
-                            palavra = reinicia_game(repetidas, palavra)
+                            palavra_e_definicao = reinicia_game(repetidas, palavra_e_definicao)
+                            palavra, definicao = palavra_e_definicao[0].upper(), palavra_e_definicao[1]
                             letras_corretas = ['_' for _ in palavra]
                             vidas = 3
                             indicadores = Indicadores((10, TELA_ALTURA/2 + 100), 15, (10, 10, 10))
                             ganhou = False
                             winnerloop = False
-                            gameLoop = True  # Adicione esta linha para reiniciar o jogo
+                            gameLoop = True  # Adicionei esta linha para reiniciar o jogo (Conrado)
                         if event.key == pygame.K_q:
                             gameLoop = False
                             restart = False
@@ -266,6 +292,8 @@ if __name__ == '__main__':
                 if event.unicode.isalpha() and len(event.unicode) == 1:
                     # Conversão para maiúscula
                     chute = event.unicode.upper()
+                    print(palavra)
+                    print(chute)
                     indicadores.atualizar(chute, palavra)
                     if chute in palavra:
                         for i, letra in enumerate(palavra):
@@ -273,7 +301,7 @@ if __name__ == '__main__':
                                 letras_corretas[i] = chute
                     else:
                         vidas-=1
-                        atualiza_boneco(vidas, dificuldade, cid)
+                        #atualiza_boneco(vidas, dificuldade, cid)
         tracos = tracoDasLetras(palavra, traco_x_inicial, traco_y, espacamento)
         draw()
 
@@ -284,8 +312,18 @@ if __name__ == '__main__':
         indicadores.desenhar(tela)
         desenhar_letras(letras_corretas, tracos)
 
+        # Muda o intervalo de sprites que deve ser apresentado
+        if not inicializando:
+            atualiza_boneco(vidas, dificuldade, cid)
+            # dessa forma o cid inicializa apenas uma vez, de acordo com o codigo update
+
+
+        # Troca as sprites dentro de um intervalo especifico
         cid.update()
+
+        # Apresenta um sprite na tela
         desenha_boneco(cid)
+
         pygame.display.flip()
         clock.tick(5)  # Limite de frames por segundo
         pygame.display.update()
