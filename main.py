@@ -175,19 +175,27 @@ def desenha_boneco(cid):#inicialmente será representado por um contador de vida
     tela.blit(cid.image, cid.rect)
 
 def atualiza_boneco(qtdvidas, dificuldade, cid):
-    #7 vidas para o modo facil
-    #4 vidas para o modo dificil, 5, 8 e 9, 12 e 13, 16 a 19 e 20 para fim
-    if(dificuldade == 1):
+    # Lista de índices para os frames
+    frames_indices = []
+
+    # 7 vidas para o modo fácil
+    # 4 vidas para o modo difícil, 5, 8 e 9, 12 e 13, 16 a 19 e 20 para o fim
+    if dificuldade == 1:
         if qtdvidas == 0:
-            cid.frames = allframes[20] # Derrota
+            frames_indices = [20]  # Derrota
         elif qtdvidas == 1:
-            cid.frames = allframes[16:20]#inclui o primeiro mas não inclui o segundo limite
+            frames_indices = list(range(16, 20))  # inclui o primeiro mas não inclui o segundo limite
         elif qtdvidas == 2:
-            cid.frames = allframes[12:14]
+            frames_indices = list(range(12, 14))
         elif qtdvidas == 3:
-            cid.frames = allframes[8:10]
+            frames_indices = list(range(8, 10))
         else:
-            cid.frames = allframes[5]
+            frames_indices = [5]
+
+    # Atualiza os frames do objeto cid com os índices obtidos
+    cid.frames = [allframes[i] for i in frames_indices]
+# O problema que chashava o jogo acontecia aqui, quando o intervalo de frames era de um frame só a função update de
+# SpryteAnimation tentava verificar o tamanhho de um frame e não de uma lista de frames.
 
 clock = pygame.time.Clock()
 
