@@ -114,18 +114,26 @@ def draw():
     # teste com alteração da cor de fundo
     tela.fill(blue)
 
-def tela_de_derrota():
+def tela_de_derrota(palavra_correta, definicao):
     tela.fill(red)  # Vermelho para indicar a derrota
     fonteg = pygame.font.Font(None, 60)
     fontep = pygame.font.Font(None, 24)
     mensagem = fonteg.render("Você Perdeu o Jogo!", True, (0, 0, 0))
-    mensagem2 = fontep.render("Essa Janela se auto destruirá em 3 segundos!", True, (0, 0, 0))
+    mensagem2 = fontep.render(f"Palavra correta: {palavra_correta}", True, (0, 0, 0))
+    mensagem3 = fontep.render(f"Definição: {definicao}", True, (0, 0, 0))
+    mensagem4 = fontep.render("Essa Janela se auto destruirá em 3 segundos!", True, (0, 0, 0))
     mensagem_rect = mensagem.get_rect()
     mensagem2_rect = mensagem2.get_rect()
-    mensagem_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2)
-    mensagem2_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 50)
+    mensagem3_rect = mensagem3.get_rect()
+    mensagem4_rect = mensagem4.get_rect()
+    mensagem_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 - 50)
+    mensagem2_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2)
+    mensagem3_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 50)
+    mensagem4_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 100)
     tela.blit(mensagem, mensagem_rect)
     tela.blit(mensagem2, mensagem2_rect)
+    tela.blit(mensagem3, mensagem3_rect)
+    tela.blit(mensagem4, mensagem4_rect)
     pygame.display.update()
 
 def tela_acabou_palavras():
@@ -146,7 +154,7 @@ def tela_acabou_palavras():
     tela.blit(mensagem2, mensagem2_rect)
     pygame.display.update()
 
-def tela_de_vitoria(palavra_vitoriosa):
+def tela_de_vitoria(palavra_vitoriosa, definicao):
     tela.fill(green)  # Preencha a tela com verde para indicar a vitória
     fonte_grande = pygame.font.Font(None, 60)
     fonte_pequena = pygame.font.Font(None, 24)
@@ -156,13 +164,61 @@ def tela_de_vitoria(palavra_vitoriosa):
     mensagem_pequena = fonte_pequena.render(f"Palavra: {palavra_vitoriosa}", True, (0, 0, 0))
     mensagem_pequena_rect = mensagem_pequena.get_rect()
     mensagem_pequena_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2)
+    mensagem_definicao = fonte_pequena.render(f"Definição: {definicao}", True, (0, 0, 0))
+    mensagem_definicao_rect = mensagem_definicao.get_rect()
+    mensagem_definicao_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 50)
     mensagem_recomecar = fonte_pequena.render("Pressione R para Recomeçar", True, (0, 0, 0))
     mensagem_recomecar_rect = mensagem_recomecar.get_rect()
-    mensagem_recomecar_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 50)
+    mensagem_recomecar_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 100)
     tela.blit(mensagem_grande, mensagem_grande_rect)
     tela.blit(mensagem_pequena, mensagem_pequena_rect)
+    tela.blit(mensagem_definicao, mensagem_definicao_rect)
     tela.blit(mensagem_recomecar, mensagem_recomecar_rect)
     pygame.display.update()
+
+def tela_selecao_dificuldade():
+    selecao_loop = True
+    dificuldade = 0  # Padrão para fácil
+
+    while selecao_loop:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1:
+                    dificuldade = 0  # Fácil
+                    selecao_loop = False
+                elif event.key == pygame.K_2:
+                    dificuldade = 1  # Difícil
+                    selecao_loop = False
+
+        tela.fill(blue)
+        fonte_grande = pygame.font.Font(None, 60)
+        fonte_pequena = pygame.font.Font(None, 36)
+
+        mensagem_grande = fonte_grande.render("Escolha a Dificuldade", True, (0, 0, 0))
+        mensagem_grande_rect = mensagem_grande.get_rect()
+        mensagem_grande_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 - 50)
+
+        mensagem_facil = fonte_pequena.render("1 - Fácil", True, (0, 0, 0))
+        mensagem_facil_rect = mensagem_facil.get_rect()
+        mensagem_facil_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 20)
+
+        mensagem_dificil = fonte_pequena.render("2 - Difícil", True, (0, 0, 0))
+        mensagem_dificil_rect = mensagem_dificil.get_rect()
+        mensagem_dificil_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 70)
+
+        tela.blit(mensagem_grande, mensagem_grande_rect)
+        tela.blit(mensagem_facil, mensagem_facil_rect)
+        tela.blit(mensagem_dificil, mensagem_dificil_rect)
+
+        pygame.display.update()
+        clock.tick(5)
+
+    return dificuldade
+
+
 
 def reinicia_game(repetidas, palavra_e_definicao):
     repetidas.append(palavra_e_definicao)
@@ -214,6 +270,24 @@ def atualiza_boneco(qtdvidas, dificuldade, cid):
         else:
             frames_indices = [5]
 
+    elif dificuldade == 0:
+        if qtdvidas == 0:
+            frames_indices = [20]  # Derrota
+        elif qtdvidas == 1:
+            frames_indices = list(range(16, 20))  # inclui o primeiro mas não inclui o segundo limite
+        elif qtdvidas == 2:
+            frames_indices = list(range(14, 16))
+        elif qtdvidas == 3:
+            frames_indices = list(range(12, 14))
+        elif qtdvidas == 4:
+            frames_indices = list(range(10, 12))
+        elif qtdvidas == 5:
+            frames_indices = list(range(8, 10))
+        elif qtdvidas == 6:
+            frames_indices = list(range(6, 8))
+        else:
+            frames_indices = [5]
+
     # Atualiza os frames do objeto cid com os índices obtidos
     cid.frames = [allframes[i] for i in frames_indices]
 # O problema que chashava o jogo acontecia aqui, quando o intervalo de frames era de um frame só a função update de
@@ -230,20 +304,20 @@ if __name__ == '__main__':
     # Cria uma lista inicializada com sublinhados e com numero de elementos igual à quantidade de letras na palavra
     letras_corretas = ['_' for _ in palavra]
 
-    dificuldade = 1 #1 para dificil e 0 para facil
-    vidas = 4
+    dificuldade = tela_selecao_dificuldade()
+    vidas = 1 + 3*dificuldade # 1+3 ou 1+6
 
     # Banco de palavras ja usadas numa secao
     repetidas = []
     indicadores = Indicadores((10, TELA_ALTURA/2 + 100), 15, (10, 10, 10))
 
-    cid = SpriteAnimation(allframes[1:6])
+    cid = SpriteAnimation(allframes[0:6])
 
     while gameLoop:
         if(vidas <= 0):
             #Tempo para apresentar o sprite de derrota do boneco
             pygame.time.delay(2000)
-            tela_de_derrota()
+            tela_de_derrota(palavra, definicao)
             # Para esperar 3 segundos antes de fechar o programa
             pygame.time.delay(3000)
             gameLoop = False
@@ -258,7 +332,7 @@ if __name__ == '__main__':
         # Verifica se não há mais letras em branco na palavra
         # ou seja, se o jogador ganhou
         if '_' not in letras_corretas:
-            tela_de_vitoria(palavra)
+            tela_de_vitoria(palavra, definicao)
             pygame.display.update()
             winnerloop = True
             while winnerloop:
