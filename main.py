@@ -304,7 +304,9 @@ if __name__ == '__main__':
     # Cria uma lista inicializada com sublinhados e com numero de elementos igual à quantidade de letras na palavra
     letras_corretas = ['_' for _ in palavra]
 
+    #Seleciona a dificuldade baseado no input da tela de seleção
     dificuldade = tela_selecao_dificuldade()
+    #seleciona a quantidade de vidas baseado na dificuldade
     vidas = 1 + 3*dificuldade # 1+3 ou 1+6
 
     # Banco de palavras ja usadas numa secao
