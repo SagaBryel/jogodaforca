@@ -186,10 +186,10 @@ def tela_selecao_dificuldade():
                 pygame.quit()
                 exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    dificuldade = 0  # Fácil
+                if event.key == pygame.K_2:
+                    dificuldade = 2  # Fácil
                     selecao_loop = False
-                elif event.key == pygame.K_2:
+                elif event.key == pygame.K_1:
                     dificuldade = 1  # Difícil
                     selecao_loop = False
 
@@ -201,11 +201,11 @@ def tela_selecao_dificuldade():
         mensagem_grande_rect = mensagem_grande.get_rect()
         mensagem_grande_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 - 50)
 
-        mensagem_facil = fonte_pequena.render("1 - Fácil", True, (0, 0, 0))
+        mensagem_facil = fonte_pequena.render("1 - Dificil", True, (0, 0, 0))
         mensagem_facil_rect = mensagem_facil.get_rect()
         mensagem_facil_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 20)
 
-        mensagem_dificil = fonte_pequena.render("2 - Difícil", True, (0, 0, 0))
+        mensagem_dificil = fonte_pequena.render("2 - Facil", True, (0, 0, 0))
         mensagem_dificil_rect = mensagem_dificil.get_rect()
         mensagem_dificil_rect.center = (TELA_LARGURA // 2, TELA_ALTURA // 2 + 70)
 
@@ -258,7 +258,7 @@ def atualiza_boneco(qtdvidas, dificuldade, cid):
 
     # 7 vidas para o modo fácil
     # 4 vidas para o modo difícil, 5, 8 e 9, 12 e 13, 16 a 19 e 20 para o fim
-    if dificuldade == 1:
+    if dificuldade == 1:#dificil
         if qtdvidas == 0:
             frames_indices = [20]  # Derrota
         elif qtdvidas == 1:
@@ -270,7 +270,7 @@ def atualiza_boneco(qtdvidas, dificuldade, cid):
         else:
             frames_indices = [5]
 
-    elif dificuldade == 0:
+    elif dificuldade == 2:#Facil
         if qtdvidas == 0:
             frames_indices = [20]  # Derrota
         elif qtdvidas == 1:
@@ -308,6 +308,8 @@ if __name__ == '__main__':
     dificuldade = tela_selecao_dificuldade()
     #seleciona a quantidade de vidas baseado na dificuldade
     vidas = 1 + 3*dificuldade # 1+3 ou 1+6
+    print(dificuldade)
+    print(vidas)
 
     # Banco de palavras ja usadas numa secao
     repetidas = []

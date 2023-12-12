@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6d5904c6-500f-45a8-bb8f-8c9804a6c373" name="Changes" comment="Tela de escolha de dificuldade incluida, porem agora há bugs para rejogar e bugs para a dificuldade facil">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -146,7 +147,21 @@
       <option name="project" value="LOCAL" />
       <updated>1702244491641</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Tela de escolha de dificuldade incluida, porem agora há bugs para rejogar e bugs para a dificuldade facil">
+      <created>1702338898230</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1702338898230</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Tela de escolha de dificuldade incluida, porem agora há bugs para rejogar e bugs para a dificuldade facil">
+      <created>1702339054001</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1702339054001</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
