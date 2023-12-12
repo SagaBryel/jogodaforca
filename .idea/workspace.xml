@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6d5904c6-500f-45a8-bb8f-8c9804a6c373" name="Changes" comment="Tela de escolha de dificuldade incluida, porem agora há bugs para rejogar e bugs para a dificuldade facil">
+    <list default="true" id="6d5904c6-500f-45a8-bb8f-8c9804a6c373" name="Changes" comment="Esoclhendo Dificuldade corretamente, problema com o reinicio, boneco inicia com vidas à menos">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -161,7 +161,14 @@
       <option name="project" value="LOCAL" />
       <updated>1702339054001</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Esoclhendo Dificuldade corretamente, problema com o reinicio, boneco inicia com vidas à menos">
+      <created>1702340808583</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1702340808583</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -184,6 +191,7 @@
     <MESSAGE value="Finalmente resolvido o problema do jogo crashar quando errava a primeira letra, em uns casos ou quando chegava na derrota." />
     <MESSAGE value="Agora o codigo finalmente pega as palavras de um arquivo externo" />
     <MESSAGE value="Tela de escolha de dificuldade incluida, porem agora há bugs para rejogar e bugs para a dificuldade facil" />
-    <option name="LAST_COMMIT_MESSAGE" value="Tela de escolha de dificuldade incluida, porem agora há bugs para rejogar e bugs para a dificuldade facil" />
+    <MESSAGE value="Esoclhendo Dificuldade corretamente, problema com o reinicio, boneco inicia com vidas à menos" />
+    <option name="LAST_COMMIT_MESSAGE" value="Esoclhendo Dificuldade corretamente, problema com o reinicio, boneco inicia com vidas à menos" />
   </component>
 </project>

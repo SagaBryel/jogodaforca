@@ -308,8 +308,8 @@ if __name__ == '__main__':
     dificuldade = tela_selecao_dificuldade()
     #seleciona a quantidade de vidas baseado na dificuldade
     vidas = 1 + 3*dificuldade # 1+3 ou 1+6
-    print(dificuldade)
-    print(vidas)
+    #print(dificuldade)
+    #print(vidas)
 
     # Banco de palavras ja usadas numa secao
     repetidas = []
@@ -349,7 +349,11 @@ if __name__ == '__main__':
                             palavra_e_definicao = reinicia_game(repetidas, palavra_e_definicao)
                             palavra, definicao = palavra_e_definicao[0].upper(), palavra_e_definicao[1]
                             letras_corretas = ['_' for _ in palavra]
-                            vidas = 3
+                            vidas = 1 + 3 * dificuldade
+                            #Para resetar a inicialização do cid
+                            cid = SpriteAnimation(allframes[0:6])
+                            inicializando = True
+                            #Assim ele mostra novamente o nome CID se formando toda vez q reinicia
                             indicadores = Indicadores((10, TELA_ALTURA/2 + 100), 15, (10, 10, 10))
                             ganhou = False
                             winnerloop = False
