@@ -72,7 +72,7 @@ for linha in range(0, spritesheet.get_height(), 400):#percorrendo a largura da s
         frame = spritesheet.subsurface((coluna, linha, 400, 400))#extraindo os frames da spritesheet
         allframes.append(frame)
 #Frames 0 a 5: inicializando
-inicializando = True# para inicializar uma vez só
+inicializando = True# para habilitar os sprites de inicialização
 #Frames 6 e 7, 8 e 9, 10 e 11, 12 e 13, 14 e 15, 16 e 17, por fim 18 e 19 representam as vidas sendo perdidas
 #Frame 20 é a derrota.
 #Classe SpriteAnimation que herda de pygame.sprite.Sprite
