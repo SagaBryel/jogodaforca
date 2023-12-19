@@ -37,12 +37,9 @@ Divisão
     02) Aprimoramento dos indicadores das letras
     03) Separação do codigo em pelomenos 3 arquivos ("main", "indicadores", "sprites", por exemplo)
     04) Correção do problema com os caracteres especiais e texto fora da janela
-    05) 
-    06) 
-    07) Adição de tela para seleção de modo de jogo 
-    08) Adição de modo de jogo de palavras em sequencia, o jogador tem 7 vidas e ao acertar uma palavra aparece a tela de definição, ele recupera até 4 vidas e vai para a proxima palavra
+    05) Adição de tela para seleção de modo de jogo
+    06) Adição de modo de jogo de palavras em sequencia, o jogador tem 7 vidas e ao acertar uma palavra aparece a tela de definição, ele recupera até 4 vidas e vai para a proxima palavra
             nesse modo, quando o jogador perde todas as vidas aparece uma tela com a pontuação (numero de palavras que ele acertou e quantas vidas ele perdeu ao longo da partida)
-    09) Separação do codigo em pelomenos 3 arquivos ("main", "indicadores", "sprites", por exemplo)
-    10) Adição de modo contra o tempo. Nesse modo os jogadores terão duas opções de dificuldade, ambos com 7 vidas, mas com tempos diferentes.
+    07) Adição de modo contra o tempo. Nesse modo os jogadores terão duas opções de dificuldade, ambos com 7 vidas, mas com tempos diferentes.
 
     
